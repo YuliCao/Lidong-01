@@ -4,6 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Emotion Analysis</title>
+
 </head>
 <body>
     <div class="Weibo-observer">
@@ -12,9 +13,20 @@
             <input id = "search-input" type="text" class="search-input" placeholder="Search or enter URL...">
             <button id = "search-button" class="search-button">Go!!!</button>
         </div>
+        <button onclick="showBarChart()"class="showBarChart">Show Bar Chart</button>
+        <button onclick="toggleInfoModule()" class="sentenceButton">Sentence Analysis</button>
+        <div id="chartContainer"></div>
+        <div id="infoModule" class="info-module"></div>
+        <a href="https://www.qsw521.com/uploadimg/image/20230710/20230710103712_20045.png" target="_blank" class="testbutton">不要按！</a>
     </div>
+
+    
+
     <script>
-        alert("还在开发中，别急。搜索栏输入非URL默认使用google，键入URL直接跳转。");
+
+        let chartVisible = false;
+        let infoModuleVisible = false;
+        // alert("还在开发中，别急。搜索栏输入非URL默认使用google，键入URL直接跳转。");
         document.getElementById("search-button").addEventListener("click", function() {
             var url = document.getElementById("search-input").value;
             if (url.includes("http://") || url.includes("https://")) {
@@ -34,6 +46,46 @@
                 }
             }
         });
+        ////////////////////////////////////////////
+        // document.getElementById("testbutton").addEventListener("click", function(){
+        //     window.location.href = "https://www.qsw521.com/uploadimg/image/20230710/20230710103712_20045.png";
+        // });
+        ////////////////////////////////////////////
+        function showBarChart() {
+
+            const chartContainer = document.getElementById("chartContainer");
+
+            if (chartVisible) {
+                chartContainer.innerHTML = '';
+            } else {
+                const data = [5, 10, 15, 20, 25];
+                data.forEach(value => {
+                    const bar = document.createElement("div");
+                    bar.classList.add("bar");
+                    bar.style.height = value * 10 + "px";
+                    bar.textContent = value;
+                    chartContainer.appendChild(bar);
+                });
+            }
+
+            chartVisible = !chartVisible; // 切换柱状图的显示状态
+        }
+
+        function toggleInfoModule() {
+            const infoModule = document.getElementById("infoModule");
+
+            if (infoModuleVisible) {
+                infoModule.style.display = 'none';
+            } else {
+                const positive = "a";
+                const negative = "b";
+                const neutral = "c";
+                infoModule.innerHTML = `积极：${positive}，消极：${negative}，中立：${neutral}`;
+                infoModule.style.display = 'block';
+            }
+
+            infoModuleVisible = !infoModuleVisible; // 切换信息模块的显示状态
+        }
     </script>
     
     <style>
@@ -56,6 +108,7 @@
             border-radius: 10px;
             margin-top: 40px;
             margin-left: 5%;
+            margin-bottom: 40px;
         }
         .title{
             font-size: large;
@@ -88,6 +141,70 @@
             border-radius: 0 20px 20px 0;
             cursor: pointer;
             user-select: none;
+        }
+        .showBarChart {
+            display: inline-block;
+            background-color: #007bff;
+            color: white;
+            padding: 10px 20px;
+            font-size: 16px;
+            border: 1px solid #007bff;
+            border-radius: 5px;
+            cursor: pointer;
+            margin-top: 20px;
+            margin-left: 20% ;
+        }
+        .sentenceButton {
+            display: inline-block;
+            background-color: #195a2e;
+            color: white;
+            padding: 10px 20px;
+            font-size: 16px;
+            border: 1px solid #297543;
+            border-radius: 5px;
+            cursor: pointer;
+            margin-top: 20px;
+            margin-left: 35%;
+            margin-right: auto;
+        }
+
+        #chartContainer {
+            width: 80%;
+            margin: 20px auto;
+            background-color: aqua;
+        }
+        .bar {
+            display: inline-block;
+            width: 20px;
+            margin-right: 5px;
+            background-color: steelblue;
+            color: white;
+            text-align: center;
+        }
+
+        .info-module {
+            display: none;
+            margin-top: 20px;
+            margin-left: 10%;
+            width: 80% ;
+            padding: 10px;
+            background-color: #d1cbcb;
+            border: 1px solid #d4cece;
+            border-radius: 5px;
+            align-self: center;
+            text-align: center;
+        }
+        .testbutton{
+            display: inline-block;
+            background-color: #ff0000;
+            color: white;
+            padding: 10px 20px;
+            font-size: 16px;
+            border: 1px solid hsl(0, 100%, 50%);
+            border-radius: 5px;
+            cursor: pointer;
+            margin-top: 20px;
+            margin-left: 20% ;
         }
     </style>
 
