@@ -46,42 +46,45 @@
                 }
             }
         });
-        ////////////////////////////////////////////
-        // document.getElementById("testbutton").addEventListener("click", function(){
-        //     window.location.href = "https://www.qsw521.com/uploadimg/image/20230710/20230710103712_20045.png";
-        // });
-        ////////////////////////////////////////////
+        
         function showBarChart() {
-
             const chartContainer = document.getElementById("chartContainer");
 
             if (chartVisible) {
                 chartContainer.innerHTML = '';
             } else {
-                const data = [5, 10, 15, 20, 25];
-                data.forEach(value => {
-                    const bar = document.createElement("div");
-                    bar.classList.add("bar");
-                    bar.style.height = value * 10 + "px";
-                    bar.textContent = value;
-                    chartContainer.appendChild(bar);
-                });
+                fetch('bar_data.txt')
+                    .then(response => response.text())
+                    .then(data => {
+                        const items = data.split(',');
+                        items.forEach(item => {
+                            const [name, value] = item.split(':');
+                            const bar = document.createElement("div");
+                            bar.classList.add("bar");
+                            bar.style.height = (value * 4 +60) + "px" ;
+                            bar.textContent = `${name}: ${value}`;
+                            chartContainer.appendChild(bar);
+                        });
+                    })
+                    .catch(error => console.error('Error:', error));
             }
 
             chartVisible = !chartVisible; // 切换柱状图的显示状态
-        }
-
+        }    
         function toggleInfoModule() {
             const infoModule = document.getElementById("infoModule");
 
             if (infoModuleVisible) {
                 infoModule.style.display = 'none';
             } else {
-                const positive = "a";
-                const negative = "b";
-                const neutral = "c";
-                infoModule.innerHTML = `积极：${positive}，消极：${negative}，中立：${neutral}`;
-                infoModule.style.display = 'block';
+                fetch('sentence_analysis.txt')
+                    .then(response => response.text())
+                    .then(data => {
+                        const [positive, negative, neutral] = data.split(',');
+                        infoModule.innerHTML = `积极：${positive}，消极：${negative}，中立：${neutral}`;
+                        infoModule.style.display = 'block';
+                    })
+                    .catch(error => console.error('Error:', error));
             }
 
             infoModuleVisible = !infoModuleVisible; // 切换信息模块的显示状态
@@ -101,7 +104,7 @@
         }
         .Weibo-observer{
             width: 90%;
-            height:600px;
+            height:90%;
             padding-top: 30px;
             box-sizing: border-box;
             background-color: rgb(255, 255, 255);
@@ -171,15 +174,20 @@
         #chartContainer {
             width: 80%;
             margin: 20px auto;
-            background-color: aqua;
+            display: flex;
+            flex-direction: row-reverse; /* 将柱状图倒过来 */
+            align-items: flex-end; /* 从底部对齐 */
+            justify-content: space-around;
         }
         .bar {
             display: inline-block;
             width: 20px;
             margin-right: 5px;
-            background-color: steelblue;
-            color: white;
+            background: linear-gradient(to top, #76c778, #329136);
+            color: rgb(0, 0, 0);
             text-align: center;
+            box-shadow: 2px 2px 5px rgba(0, 0, 0, 0.2);
+            transition: height 0.5s;
         }
 
         .info-module {
